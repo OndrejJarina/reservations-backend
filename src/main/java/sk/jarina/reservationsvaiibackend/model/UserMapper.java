@@ -15,10 +15,10 @@ public class UserMapper implements RowMapper<User> {
                 UUID.fromString(rs.getString("id")),
                 rs.getString("email"),
                 rs.getString("name"),
-                rs.getString("surname"),
+                rs.getString("surnmame"),
                 rs.getString("password"),
-                rs.getDate("birthDate"),
-                rs.getString("accountType")
+                rs.getDate("birth_date"),
+                rs.getString("account_type")
         );
     }
 }

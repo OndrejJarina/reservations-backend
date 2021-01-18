@@ -20,6 +20,8 @@ public class UserDaoImpl{
     }
 
     public Iterable<User> findByEmail(String userEmail){
+        //return (User) jdbcTemplate.queryForObject("select * from users where email = ?", new Object[]{userEmail}, userMapper);
         return jdbcTemplate.query("select * from users where email = ?", userMapper, userEmail);
     }
 }
+

@@ -2,6 +2,7 @@ package sk.jarina.reservationsvaiibackend.api;
 
 import com.google.common.collect.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -57,6 +58,17 @@ public class UserController {
             System.out.println("tri");
             throw new Exception("Incorrect username or password", ex);
         }
+    }
+
+    @PostMapping(value="/login")
+    public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequest authenticationRequest){
+        String email = authenticationRequest.getEmail();
+        String password = authenticationRequest.getPassword();
+        User user = userService.validateUser(email, password);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "logged in succesfuly!");
+        return new ResponseEntity<>(map, HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/signup")
