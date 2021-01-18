@@ -44,7 +44,6 @@ public class UserService implements UserDetailsService {
     }
 
     private List<GrantedAuthority> getUserGrantedAuthority(String roles) {
-
         Set<GrantedAuthority> newRoles = new HashSet<>();
         newRoles.add(new SimpleGrantedAuthority(roles));
         return new ArrayList<>(newRoles);

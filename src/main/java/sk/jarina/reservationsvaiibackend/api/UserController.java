@@ -16,10 +16,13 @@ import sk.jarina.reservationsvaiibackend.security.AuthenticationResponse;
 import sk.jarina.reservationsvaiibackend.security.JwtUtil;
 import sk.jarina.reservationsvaiibackend.service.UserService;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RequestMapping("api/auth")
 @RestController
@@ -43,17 +46,13 @@ public class UserController {
             System.out.println("dva");
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail().toLowerCase(), authenticationRequest.getPassword())
             );
-
             System.out.println("styri");
 
             final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
             final String jwt = jwtTokenUtil.generateToken(userDetails);
-
             System.out.println("pat");
             return ResponseEntity.ok(new AuthenticationResponse(jwt));
-
         }
-
         catch (BadCredentialsException ex) {
             System.out.println("tri");
             throw new Exception("Incorrect username or password", ex);
@@ -67,7 +66,15 @@ public class UserController {
         User user = userService.validateUser(email, password);
         Map<String, String> map = new HashMap<>();
         map.put("message", "logged in succesfuly!");
-        return new ResponseEntity<>(map, HttpStatus.OK);
+        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
+        String token = jwtTokenUtil.generateToken(userDetails);
+        Map<Object, Object> model = new HashMap<>();
+        model.put("username", authenticationRequest.getEmail());
+        model.put("token", token);
+        //model.put("role", roles);
+
+        return ok(model);
+
 
     }
 

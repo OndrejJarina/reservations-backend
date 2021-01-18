@@ -17,6 +17,8 @@ import java.util.function.Function;
 public class JwtUtil {
     private String SECRET_KEY = "secret";
 
+    private final long VALIDITY = 2*60*60*1000;
+
     @PostConstruct
     protected void init(){
         SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
@@ -53,7 +55,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 36000000))
+                .setExpiration(new Date(System.currentTimeMillis() + VALIDITY))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 

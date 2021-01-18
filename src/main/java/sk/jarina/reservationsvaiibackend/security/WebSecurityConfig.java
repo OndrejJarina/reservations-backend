@@ -2,6 +2,7 @@ package sk.jarina.reservationsvaiibackend.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,8 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.httpBasic().disable().csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
               //  .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/film").hasAuthority("ADMIN")
                 .antMatchers("/**").permitAll()
-             //   .antMatchers(HttpMethod.POST,"/api/auth/signup").permitAll()
                // .antMatchers(HttpMethod.POST,"/api/auth/token").permitAll()
                 .anyRequest().authenticated().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorized());
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
