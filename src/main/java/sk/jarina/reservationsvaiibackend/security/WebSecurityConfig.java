@@ -39,16 +39,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf().disable().authorizeRequests().antMatchers("/api/auth/signup").permitAll()
-//                .anyRequest().authenticated()
-//        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.httpBasic().disable().csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-              //  .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/film").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/film").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/film").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/screening").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/tickets").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/tickets").hasAuthority("CUSTOMER")
+                .antMatchers(HttpMethod.GET,"/api/tickets").hasAuthority("CUSTOMER")
+                .antMatchers(HttpMethod.GET,"/api/tickets").hasAuthority("ADMIN")
                 .antMatchers("/**").permitAll()
-               // .antMatchers(HttpMethod.POST,"/api/auth/token").permitAll()
                 .anyRequest().authenticated().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorized());
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
