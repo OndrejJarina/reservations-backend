@@ -38,25 +38,32 @@ public class UserController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    @PostMapping(value = "/token")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
-        System.out.println(authenticationRequest.getEmail());
-        System.out.println(authenticationRequest.getPassword());
-        try{
-            System.out.println("dva");
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail().toLowerCase(), authenticationRequest.getPassword())
-            );
-            System.out.println("styri");
-
-            final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
-            final String jwt = jwtTokenUtil.generateToken(userDetails);
-            System.out.println("pat");
-            return ResponseEntity.ok(new AuthenticationResponse(jwt));
-        }
-        catch (BadCredentialsException ex) {
-            System.out.println("tri");
-            throw new Exception("Incorrect username or password", ex);
-        }
+//    @PostMapping(value = "/token")
+//    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
+//        System.out.println(authenticationRequest.getEmail());
+//        System.out.println(authenticationRequest.getPassword());
+//        try{
+//            System.out.println("dva");
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail().toLowerCase(), authenticationRequest.getPassword())
+//            );
+//            System.out.println("styri");
+//
+//            final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
+//            final String jwt = jwtTokenUtil.generateToken(userDetails);
+//            System.out.println("pat");
+//            return ResponseEntity.ok(new AuthenticationResponse(jwt));
+//        }
+//        catch (BadCredentialsException ex) {
+//            System.out.println("tri");
+//            throw new Exception("Incorrect username or password", ex);
+//        }
+//    }
+//
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.GET})
+    @GetMapping(value="/user/{email}")
+    public User getUserByEmail(@PathVariable String email){
+        User result = Iterables.get(this.userService.findUserByEmail(email), 0);
+        return result;
     }
 
     @PostMapping(value="/login")
@@ -67,15 +74,13 @@ public class UserController {
         Map<String, String> map = new HashMap<>();
         map.put("message", "logged in succesfuly!");
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getEmail());
+        User user1 = Iterables.get(userService.findUserByEmail(authenticationRequest.getEmail()), 0);
         String token = jwtTokenUtil.generateToken(userDetails);
         Map<Object, Object> model = new HashMap<>();
-        model.put("username", authenticationRequest.getEmail());
+        model.put("email", authenticationRequest.getEmail());
         model.put("token", token);
-        //model.put("role", roles);
-
+        model.put("account_type", user1.getAccountType());
         return ok(model);
-
-
     }
 
     @PostMapping(value = "/signup")

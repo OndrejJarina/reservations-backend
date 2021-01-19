@@ -45,4 +45,9 @@ public class TicketController {
     public void updateTicket(@PathVariable("id") UUID id, @RequestBody Ticket editedTicket){
         this.ticketService.updateTicket(id, editedTicket);
     }
+
+    @GetMapping(path= "/customer/{id}")
+    public Iterable<Ticket> getTicketByUserId(@PathVariable("id") UUID id){
+       return this.ticketService.getAllByUserId(id);
+    }
 }

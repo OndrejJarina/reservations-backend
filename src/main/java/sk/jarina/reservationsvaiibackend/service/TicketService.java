@@ -39,4 +39,7 @@ public class TicketService {
         this.ticketDao.save(ticket);
     }
 
+    public Iterable<Ticket> getAllByUserId(UUID id){
+        return this.ticketDao.getAllByUserId(id);
+    }
 }

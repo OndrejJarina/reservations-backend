@@ -25,10 +25,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    public UserService(@Qualifier("UserDao") UserDao userDao) {
-//        this.userDao = userDao;
-//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -76,7 +72,6 @@ public class UserService implements UserDetailsService {
             email = email.toLowerCase();
         }
         Iterable<User> user1 = userDao.findByEmail(email);
-        System.out.println("hele");
         User selected = Iterables.get(user1, 0);
         if (!BCrypt.checkpw(password, selected.getPassword())) {
             throw new UsernameNotFoundException("Invalid email/password");

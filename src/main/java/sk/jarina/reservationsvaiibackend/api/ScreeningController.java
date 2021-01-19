@@ -48,4 +48,5 @@ public class ScreeningController {
     public void updateScreening(@PathVariable("id") UUID id, @RequestBody Screening editedScreening) {
         this.screeningService.updateScreening(id, editedScreening);
     }
+
 }

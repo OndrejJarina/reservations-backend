@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface TicketDao extends CrudRepository<Ticket, UUID> {
 
     Ticket saveWithRandomUuid(Ticket ticket);
+
+    Iterable<Ticket> getAllByUserId(UUID id);
 }

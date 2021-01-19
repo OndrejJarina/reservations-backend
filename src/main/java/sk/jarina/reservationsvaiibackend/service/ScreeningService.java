@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sk.jarina.reservationsvaiibackend.dao.ScreeningDao;
 import sk.jarina.reservationsvaiibackend.model.Screening;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
